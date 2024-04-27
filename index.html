@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>3D Bar Chart with Larger Text and Centered Bars - A-Frame & D3.js</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a-scene>
+        <!-- Camera with Look Controls for navigation -->
+        <a-entity camera look-controls wasd-controls position="0 2 10"></a-entity>
+
+        <!-- Lighting for proper visibility -->
+        <a-light type="ambient" color="#fff"></a-light>
+        <a-light type="directional" color="#fff" position="-1 2 3"></a-light>
+
+        <!-- Bar Chart Container -->
+        <a-entity id="bar-chart" position="0 0 0"></a-entity>
+    </a-scene>
+
+    <script>
+        const data = [
+            { period: "July - Sept 2009", value: 15.444 },
+            { period: "Oct - Dec 2009", value: 14.881 },
+            { period: "Jan - Mar 2010", value: 15.468 },
+            { period: "Apr - June 2010", value: 14.697 },
+            { period: "July - Sept 2010", value: 15.291 },
+            { period: "Oct - Dec 2010", value: 15.863 },
+            { period: "Jan - Mar 2011", value: 15.295 },
+            { period: "Apr - June 2011", value: 15.803 },
+            { period: "July - Sept 2011", value: 16.902 },
+            { period: "Oct - Dec 2011", value: 16.459 },
+            { period: "Jan - Mar 2012", value: 16.212 },
+            { period: "Apr - June 2012", value: 16.202 },
+            { period: "July - Sept 2012", value: 15.021 },
+            { period: "Oct - Dec 2012", value: 14.772 },
+            { period: "Jan - Mar 2013", value: 15.017 },
+            { period: "Apr - June 2013", value: 14.886 },
+            { period: "July - Sept 2013", value: 14.943 },
+            { period: "Oct - Dec 2013", value: 14.215 },
+            { period: "Jan - Mar 2014", value: 13.416 },
+            { period: "Apr - June 2014", value: 13.215 },
+            { period: "July - Sept 2014", value: 13.284 },
+            { period: "Oct - Dec 2014", value: 13.348 },
+            { period: "Jan - Mar 2015", value: 12.851 },
+            { period: "Apr - June 2015", value: 12.656 },
+            { period: "July - Sept 2015", value: 11.805 },
+            { period: "Oct - Dec 2015", value: 11.867 },
+            { period: "Jan - Mar 2016", value: 12.002 },
+            { period: "Apr - June 2016", value: 11.734 },
+            { period: "July - Sept 2016", value: 11.995 },
+            { period: "Oct - Dec 2016", value: 11.508 },
+            { period: "Jan - Mar 2017", value: 11.165 },
+            { period: "Apr - June 2017", value: 11.154 },
+            { period: "July - Sept 2017", value: 11.255 },
+            { period: "Oct - Dec 2017", value: 11.257 },
+            { period: "Jan - Mar 2018", value: 11.362 },
+            { period: "Apr - June 2018", value: 11.116 },
+            { period: "July - Sept 2018", value: 10.856 },
+            { period: "Oct - Dec 2018", value: 11.334 },
+            { period: "Jan - Mar 2019", value: 11.018 },
+            { period: "Apr - June 2019", value: 11.46 },
+            { period: "July - Sept 2019", value: 11.599 }
+        ];
+
+        const barWidth = 0.5;  // Width of each bar
+        const barSpacing = 0.5; // Space between bars
+        const heightScale = 0.3; // Scale factor for bar height
+        const textFontSize = 3; // Larger font size for better visibility
+
+        const totalBars = data.length;
+        const chartWidth = totalBars * (barWidth + barSpacing);
+        const centerOffset = (chartWidth - barSpacing) / 2;
+
+        const chartContainer = document.getElementById("bar-chart");
+
+        data.forEach((d, index) => {
+            const barHeight = d.value * heightScale;
+
+            // Create the bar
+            const bar = document.createElement("a-box");
+            bar.setAttribute("color", "#FF5733"); // Consistent bar color
+            bar.setAttribute("depth", barWidth);  // Depth of the bar
+            bar.setAttribute("width", barWidth);  // Width of the bar
+            bar.setAttribute("height", barHeight); // Height of the bar
+            bar.setAttribute("position", `${index * (barWidth + barSpacing) - centerOffset} ${barHeight / 2} 0`); // Centered position
+
+            // Create a text label for the bar value
+            const valueLabel = document.createElement("a-entity");
+            valueLabel.setAttribute("text", {
+                value: `${d.value.toFixed(3)}`, // Rounded to 3 decimal places
+                align: "center",
+                color: "#000", // Black text for contrast
+                baseline: "bottom",
+                fontSize: textFontSize,
+                wrapCount: 10 // To avoid text being clipped
+            });
+            valueLabel.setAttribute("position", `${index * (barWidth + barSpacing) - centerOffset} ${barHeight + 0.5} 0`); // Position above the bar
+
+            // Create a text label for the x-axis (period)
+            const xAxisLabel = document.createElement("a-entity");
+            xAxisLabel.setAttribute("text", {
+                value: d.period, // Display the time period
+                align: "center",
+                color: "#000", // Black text for contrast
+                baseline: "center",
+                fontSize: textFontSize,
+                wrapCount: 10
+            });
+            xAxisLabel.setAttribute("position", `${index * (barWidth + barSpacing) - centerOffset} -0.5 0`); // Position below the bar
+
+            // Append the bar and labels to the chart container
+            chartContainer.appendChild(bar);
+            chartContainer.appendChild(valueLabel);
+            chartContainer.appendChild(xAxisLabel);
+        });
+    </script>
+</body>
+</html>
